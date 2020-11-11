@@ -1,0 +1,129 @@
+<!-- 
+    Author: Delowar Hossain
+    Author URI: https://github.com/illusionist3886
+    License: GLWTPL
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Password Validation</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        body {
+            background: hsl(206, 91%, 5%);
+            color: aliceblue;
+            margin-top: 3rem;
+        }
+        strong{
+            border: 1px solid white;
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        meter
+        {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto" id="app">
+                <div class="form-group">
+                    <label for="password"><b>Password</b></label>
+                    <input type="text" name="password" id="password" placeholder="Password" class="form-control" v-model="userpass" autocomplete="off">
+                </div>
+                <strong class="d-block">Password Strength Check List </strong>
+                    <p id="length" :class="[ passwordLength ? 'text-success' : 'text-danger']">
+                        <i :class="[ passwordLength ? 'fa fa-check-circle' : 'fa fa-times-circle']"></i>
+                        Password must be minimum 8 character long
+                    </p>
+                    <p id="length" :class="[ passwordNumeric ? 'text-success' : 'text-danger']">
+                        <i :class="[ passwordNumeric ? 'fa fa-check-circle' : 'fa fa-times-circle']"></i>
+                        Password must be contain one numeric value
+                    </p>
+                    <p id="length" :class="[ passwordCapitalLetter ? 'text-success' : 'text-danger']">
+                        <i :class="[ passwordCapitalLetter ? 'fa fa-check-circle' : 'fa fa-times-circle']"></i>
+                        Password must be contain one capital letter
+                    </p>
+                    <p id="length" :class="[ passwordSmallLetter ? 'text-success' : 'text-danger']">
+                        <i :class="[ passwordSmallLetter ? 'fa fa-check-circle' : 'fa fa-times-circle']"></i>
+                        Password must be contain one small letter
+                    </p>
+                    <p id="length" :class="[ passwordSymbol ? 'text-success' : 'text-danger']">
+                        <i :class="[ passwordSymbol ? 'fa fa-check-circle' : 'fa fa-times-circle']"></i>
+                        Password must be contain one special symbol
+                    </p>
+                <strong class="d-block">Password Strength Meter </strong>
+                <meter :value="strengthMeter"></meter>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/vue2.6.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data : {
+                userpass : '',
+            },
+            computed: {
+                passwordLength() {
+                    if(this.userpass.length>7)
+                    {
+                        return true;
+                    }
+                },
+                passwordNumeric() {
+                    if(this.userpass.match(/[0-9]/gm))
+                    {
+                        return true;
+                    }
+                },
+                passwordCapitalLetter() {
+                    if(this.userpass.match(/[A-Z]/gm))
+                    {
+                        return true;
+                    }
+                },
+                passwordSmallLetter() {
+                    if(this.userpass.match(/[a-z]/gm))
+                    {
+                        return true;
+                    }
+                },
+                passwordSymbol() {
+                    if(this.userpass.match(/[*.!@#$%^&(){}[\\\]:;<>,.?\/~_\+\-=\|]/gm))
+                    {
+                        return true;
+                    }
+                },
+                strengthMeter() {
+                    countTrue = 0;
+                    if(this.userpass.length>0)
+                    {
+                        this.validationStatus.forEach(element => {
+                            if(element)
+                            {
+                                countTrue += 1
+                            }
+
+                        });
+                    }
+                    return countTrue/5 // Total 5 Validation
+                },
+                validationStatus() {
+                    return [this.passwordLength,this.passwordNumeric,this.passwordCapitalLetter,this.passwordSmallLetter,this.passwordSymbol]
+                }
+            }
+        })
+    </script>
+</body>
+</html>
